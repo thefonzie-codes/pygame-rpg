@@ -20,7 +20,7 @@ class Player:
             "RRRRRRRR",
             " RRRRRR ",
             "   RRR  ",
-            "    RR  ",
+            "    RRR ",
         ],
         [
             " WWWWWW ",
@@ -33,7 +33,7 @@ class Player:
             "RRRRRRRR",
             " RRRRRR ",
             "  RRR   ",
-            "  RR    ",
+            " RRR    ",
         ]]
         # Add 'red' to colors in main.py
 
@@ -51,18 +51,3 @@ class Player:
         # Keep within bounds
         self.x = max(0, min(self.x, self.grid_size - self.width))
         self.y = max(0, min(self.y, self.grid_size - self.height))
-
-    def draw(self, screen, colors):
-        model = self.models[0] if self.tick < 12 else self.models[1]
-        for y, row in enumerate(model):
-            for x, pixel in enumerate(row):   
-                if pixel == 'W':
-                    color = colors['white']
-                elif pixel == 'B':
-                    color = colors['black']
-                elif pixel == 'R':
-                    color = colors['red']  # Using red for player
-                else:
-                    continue
-
-                pygame.draw.rect(screen, color, ((self.x + x) * self.pixel_size, (self.y + y) * self.pixel_size, self.pixel_size, self.pixel_size)) 
