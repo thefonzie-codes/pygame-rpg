@@ -3,18 +3,16 @@ import sys
 from entities.ghost import Ghost
 from entities.player import Player
 from system.camera import Camera
-from constants import SCREEN_WIDTH, SCREEN_HEIGHT, COLORS, GRID_SIZE, PIXEL_SIZE, FPS
+from constants import *
+from system.map import Map
+from textures.base_floor import BaseFloor
 
 def main():
-    # Initialize pygame
     pygame.init()
 
-    # Set up the display
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption('RPG Game')
 
-
-    # Use a tick counter to control the animation
     tick = 0
     clock = pygame.time.Clock()
     running = True
@@ -25,10 +23,11 @@ def main():
 
     camera = Camera(SCREEN_WIDTH, SCREEN_HEIGHT, GRID_SIZE)
 
-    # Main game loop
+    base_floor = BaseFloor()
+    base_map = Map(MAX_MAP_WIDTH, MAX_MAP_HEIGHT, PIXEL_SIZE, base_floor)
+
     while running:
         clock.tick(FPS)
-        # Resets the tick counter if it reaches the FPS
         if tick >= FPS:
             tick = 0
         else:
@@ -37,17 +36,15 @@ def main():
         ghost.tick = tick
         player.tick = tick
         
-        screen.fill(COLORS['black'])  # Clear screen
-        
-        # Get keyboard input
+        screen.fill(COLORS['black'])
+
         keys = pygame.key.get_pressed()
         player.move(keys)
                 
-        ghost.move()  # Move the ghost
-
-        # Update camera to follow player
+        ghost.move()
         camera.update(player)
 
+        base_map.draw(screen, camera)
         ghost_pos = camera.apply(ghost)
         player_pos = camera.apply(player)
 
