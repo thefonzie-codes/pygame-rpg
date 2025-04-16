@@ -27,6 +27,7 @@ def main():
     base_map = Map(MAX_MAP_WIDTH, MAX_MAP_HEIGHT, PIXEL_SIZE, base_floor)
 
     while running:
+
         clock.tick(FPS)
         if tick >= FPS:
             tick = 0
@@ -45,6 +46,7 @@ def main():
         camera.update(player)
 
         base_map.draw(screen, camera)
+
         ghost_pos = camera.apply(ghost)
         player_pos = camera.apply(player)
 
@@ -73,6 +75,8 @@ def draw_entity(screen, entity, position, colors):
                 color = colors['red']
             elif pixel == 'G':
                 color = colors['grey']
+            elif pixel == 'D':
+                color = colors['darkgrey']
             else:
                 continue
 
