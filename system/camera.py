@@ -15,5 +15,4 @@ class Camera:
         self.offset_y = target_center_y - (self.height // (2 * target.pixel_size))
        
     def apply(self, entity):
-
         return (entity.x - self.offset_x, entity.y - self.offset_y)

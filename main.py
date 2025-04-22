@@ -1,5 +1,6 @@
 import pygame
 import sys
+import argparse
 from entities.ghost import Ghost
 from entities.player import Player
 from system.camera import Camera
@@ -8,9 +9,15 @@ from system.map import Map
 from textures.base_floor import BaseFloor
 
 def main():
+    parser = argparse.ArgumentParser(description='RPG Game')
+    parser.add_argument('--debug', action='store_true', help='Enable debug mode')
+    args = parser.parse_args()
+    
+    debug_mode = args.debug
+    
     pygame.init()
 
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    screen = pygame.display.set_mode((VIEWPORT_WIDTH, VIEWPORT_HEIGHT))
     pygame.display.set_caption('RPG Game')
 
     tick = 0
@@ -21,7 +28,7 @@ def main():
     
     player = Player(32, 32, PIXEL_SIZE, tick, GRID_SIZE)
 
-    camera = Camera(SCREEN_WIDTH, SCREEN_HEIGHT, GRID_SIZE)
+    camera = Camera(VIEWPORT_WIDTH, VIEWPORT_HEIGHT, GRID_SIZE)
 
     base_floor = BaseFloor()
     base_map = Map(MAX_MAP_WIDTH, MAX_MAP_HEIGHT, PIXEL_SIZE, base_floor)
@@ -52,6 +59,17 @@ def main():
 
         draw_entity(screen, ghost, ghost_pos, COLORS)
         draw_entity(screen, player, player_pos, COLORS)
+
+        # Debug information
+        if debug_mode and tick % 10 == 0:  # Only print every 10 ticks to avoid console spam
+            print("\n--- DEBUG INFO ---")
+            print(f"Camera: pos=({camera.offset_x}, {camera.offset_y}), size=({camera.width}, {camera.height})")
+            print(f"Player: pos=({player.x}, {player.y}), size=({player.width}, {player.height})")
+            print(f"Ghost: pos=({ghost.x}, {ghost.y}), size=({ghost.width}, {ghost.height})")
+            print(f"Map: viewport=({camera.offset_x}-{camera.offset_x + camera.width // PIXEL_SIZE}, "
+                  f"{camera.offset_y}-{camera.offset_y + camera.height // PIXEL_SIZE}), "
+                  f"size=({base_map.width}, {base_map.height})")
+            print("-----------------")
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

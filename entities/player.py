@@ -38,7 +38,38 @@ class Player:
                 " BG BB  ",
                 "DBBBGBBD",
                 " DDDDDD "
-        ]]
+            ],
+            [
+                " GGGGGG ",
+                "GWWWWWWG",
+                "GBWWWBWG",
+                "GWWWWWWG",
+                " GGGGGG ",
+                "GBBBBBBG",
+                "GBBBBBBG",
+                "GBBBBBBG",
+                " GGGGGG ",
+                "   B  BB ",
+                " BBD  BB",
+                "BBBDDBBBB",
+                "DDDDDDDD"
+            ],
+            [
+                " GGGGGG ",
+                "GWWWWWWG",
+                "GBWWWBWG",
+                "GWWWWWWG",
+                " GGGGGG ",
+                "GBBBBBBG",
+                "GBBBBBBG",
+                "GBBBBBBG",
+                " GGGGGG ",
+                "  BB GB ",
+                "  BB GB ",
+                "DBBGBBBD",
+                " DDDDDD "
+            ]
+        ]
 
     def move(self, keys):
         if keys[pygame.K_w]:
