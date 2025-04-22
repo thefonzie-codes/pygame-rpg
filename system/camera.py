@@ -1,9 +1,8 @@
 class Camera:
 
-    def __init__(self, width, height, grid_size):
+    def __init__(self, width, height):
         self.width = width
         self.height = height
-        self.grid_size = grid_size
         self.offset_x = 0
         self.offset_y = 0
 

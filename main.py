@@ -25,13 +25,13 @@ def main():
     running = True
 
     ghost = Ghost(64, 64, PIXEL_SIZE, tick, GRID_SIZE) 
-    
-    player = Player(32, 32, PIXEL_SIZE, tick, GRID_SIZE)
 
-    camera = Camera(VIEWPORT_WIDTH, VIEWPORT_HEIGHT, GRID_SIZE)
+    camera = Camera(VIEWPORT_WIDTH, VIEWPORT_HEIGHT)
 
     base_floor = BaseFloor()
-    base_map = Map(MAX_MAP_WIDTH, MAX_MAP_HEIGHT, PIXEL_SIZE, base_floor)
+    base_map = Map(512, 512, PIXEL_SIZE, base_floor)
+
+    player = Player(32, 32, PIXEL_SIZE, tick, base_map)
 
     while running:
 
