@@ -8,7 +8,7 @@ class Player:
         self.tick = tick
         self.map = map
         self.width = 8
-        self.height = 12
+        self.height = 13
         self.models = [[
                 " GGGGGG ",
                 "GWWWWWWG",
