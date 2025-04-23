@@ -1,12 +1,12 @@
 import pygame
 
 class Player:
-    def __init__(self, x, y, pixel_size, tick, map):
+    def __init__(self, x, y, pixel_size, tick, level_map):
         self.x = x
         self.y = y
         self.pixel_size = pixel_size
         self.tick = tick
-        self.map = map
+        self.level_map = level_map
         self.width = 8
         self.height = 13
         self.models = [[
@@ -81,5 +81,5 @@ class Player:
         if keys[pygame.K_d]:
             self.x += 1
 
-        self.x = max(0, min(self.x, self.map.width - self.width))
-        self.y = max(0, min(self.y, self.map.height - self.height))
+        self.x = max(0, min(self.x, self.level_map.width - self.width))
+        self.y = max(0, min(self.y, self.level_map.height - self.height))

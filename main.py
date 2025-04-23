@@ -29,9 +29,9 @@ def main():
     camera = Camera(VIEWPORT_WIDTH, VIEWPORT_HEIGHT)
 
     base_floor = BaseFloor()
-    base_map = Map(512, 512, PIXEL_SIZE, base_floor)
+    level_map = Map(MAX_MAP_WIDTH, MAX_MAP_HEIGHT, PIXEL_SIZE, base_floor)
 
-    player = Player(32, 32, PIXEL_SIZE, tick, base_map)
+    player = Player(32, 32, PIXEL_SIZE, tick, level_map)
 
     while running:
 
@@ -52,7 +52,7 @@ def main():
         ghost.move()
         camera.update(player)
 
-        base_map.draw(screen, camera)
+        level_map.draw(screen, camera)
 
         ghost_pos = camera.apply(ghost)
         player_pos = camera.apply(player)
@@ -68,7 +68,7 @@ def main():
             print(f"Ghost: pos=({ghost.x}, {ghost.y}), size=({ghost.width}, {ghost.height})")
             print(f"Map: viewport=({camera.offset_x}-{camera.offset_x + camera.width // PIXEL_SIZE}, "
                   f"{camera.offset_y}-{camera.offset_y + camera.height // PIXEL_SIZE}), "
-                  f"size=({base_map.width}, {base_map.height})")
+                  f"size=({level_map.width}, {level_map.height})")
             print("-----------------")
 
         for event in pygame.event.get():
