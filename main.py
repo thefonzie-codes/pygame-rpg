@@ -58,7 +58,7 @@ def main():
         player_pos = camera.apply(player)
 
         draw_entity(screen, ghost, ghost_pos, COLORS)
-        draw_entity(screen, player, player_pos, COLORS)
+        player.draw(screen, player_pos)
 
         # Debug information
         if debug_mode and tick % 10 == 0:  # Only print every 10 ticks to avoid console spam
