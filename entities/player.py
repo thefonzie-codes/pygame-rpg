@@ -71,22 +71,27 @@ class Player:
                 " DDDDDD "
             ]
         ]
+        self.last_direction = 'right'  # Default to right
 
     def move(self, keys):
-        if keys[pygame.K_w]:
-            self.y -= 1
-        if keys[pygame.K_s]:
-            self.y += 1
+        moving = False
         if keys[pygame.K_a]:
             self.x -= 1
+            self.last_direction = 'left'
+            moving = True
         if keys[pygame.K_d]:
             self.x += 1
+            self.last_direction = 'right'
+            moving = True
 
         self.x = max(0, min(self.x, self.level_map.width - self.width))
         self.y = max(0, min(self.y, self.level_map.height - self.height))
 
     def draw(self, screen, position):
-        model = self.models[0] if self.tick < 12 else self.models[1]
+        if self.last_direction == 'right':
+            model = self.models[0] if self.tick < 12 else self.models[1]
+        else:  # left
+            model = self.models[2] if self.tick < 12 else self.models[3]
         draw_x, draw_y = position
 
         for y, row in enumerate(model):
