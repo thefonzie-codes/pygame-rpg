@@ -109,9 +109,9 @@ class Player:
         draw_x, draw_y = position
         if self.moving == False:
             if self.last_direction == 'right':
-                model = self.models[1]
+                model = self.models[0]
             elif self.last_direction == 'left':
-                model = self.models[3]
+                model = self.models[2]
 
         if self.moving == True:
             if self.last_direction == 'right':
