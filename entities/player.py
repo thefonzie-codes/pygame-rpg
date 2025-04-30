@@ -10,6 +10,9 @@ class Player:
         self.level_map = level_map
         self.width = 8
         self.height = 13
+        self.moving = False
+        self.last_direction = 'right'
+        self.animation_tick_start = 0
         self.models = [[
                 " GGGGGG ",
                 "GWWWWWWG",
@@ -71,45 +74,88 @@ class Player:
                 " DDDDDD "
             ]
         ]
-        self.last_direction = 'right'  # Default to right
 
     def move(self, keys):
-        moving = False
         if keys[pygame.K_a]:
+            self.moving = True
             self.x -= 1
             self.last_direction = 'left'
-            moving = True
+            self.animation_tick_start = self.tick
         if keys[pygame.K_d]:
+            self.moving = True
             self.x += 1
             self.last_direction = 'right'
-            moving = True
+            self.animation_tick_start = self.tick
+        if keys[pygame.K_w]:
+            self.moving = True
+            self.y -= 1
+            self.animation_tick_start = self.tick
+            # self.last_direction = 'up' # Adding this into the ideal response to make it easier to implement later
+        if keys[pygame.K_s]:
+            self.moving = True
+            self.y += 1
+            self.animation_tick_start = self.tick
+            # self.last_direction = 'down' # Adding this into the ideal response to make it easier to implement later
+
+        if self.moving and self.tick == 24:
+            self.moving = False
+            self.animation_tick_start = 0
 
         self.x = max(0, min(self.x, self.level_map.width - self.width))
         self.y = max(0, min(self.y, self.level_map.height - self.height))
 
     def draw(self, screen, position):
-        if self.last_direction == 'right':
-            model = self.models[0] if self.tick < 12 else self.models[1]
-        else:  # left
-            model = self.models[2] if self.tick < 12 else self.models[3]
-        draw_x, draw_y = position
+        if self.moving == False:
+            if self.last_direction == 'right':
+                model = self.models[1]
+            elif self.last_direction == 'left':
+                model = self.models[3]
 
-        for y, row in enumerate(model):
-            for x, pixel in enumerate(row):
-                if pixel == 'W':
-                    color = COLORS['white']
-                elif pixel == 'B':
-                    color = COLORS['black']
-                elif pixel == 'R':
-                    color = COLORS['red']
-                elif pixel == 'G':
-                    color = COLORS['grey']
-                elif pixel == 'D':
-                    color = COLORS['darkgrey']
-                else:
-                    continue
+            draw_x, draw_y = position
 
-                pygame.draw.rect(screen, color, 
-                    ((draw_x + x) * self.pixel_size, 
-                    (draw_y + y) * self.pixel_size, 
-                    self.pixel_size, self.pixel_size))
+            for y, row in enumerate(model):
+                for x, pixel in enumerate(row):
+                    if pixel == 'W':
+                        color = COLORS['white']
+                    elif pixel == 'B':
+                        color = COLORS['black']
+                    elif pixel == 'R':
+                        color = COLORS['red']
+                    elif pixel == 'G':
+                        color = COLORS['grey']
+                    elif pixel == 'D':
+                        color = COLORS['darkgrey']
+                    else:
+                        continue
+
+                    pygame.draw.rect(screen, color, 
+                        ((draw_x + x) * self.pixel_size, 
+                        (draw_y + y) * self.pixel_size, 
+                        self.pixel_size, self.pixel_size))
+
+        if self.moving == True:
+            if self.last_direction == 'right':
+                model = self.models[1] if self.animation_tick_start + self.tick < 12 else self.models[0]
+            else:  # left
+                model = self.models[3] if self.animation_tick_start + self.tick < 12 else self.models[2]
+            draw_x, draw_y = position
+
+            for y, row in enumerate(model):
+                for x, pixel in enumerate(row):
+                    if pixel == 'W':
+                        color = COLORS['white']
+                    elif pixel == 'B':
+                        color = COLORS['black']
+                    elif pixel == 'R':
+                        color = COLORS['red']
+                    elif pixel == 'G':
+                        color = COLORS['grey']
+                    elif pixel == 'D':
+                        color = COLORS['darkgrey']
+                    else:
+                        continue
+
+                    pygame.draw.rect(screen, color, 
+                        ((draw_x + x) * self.pixel_size, 
+                        (draw_y + y) * self.pixel_size, 
+                        self.pixel_size, self.pixel_size))
