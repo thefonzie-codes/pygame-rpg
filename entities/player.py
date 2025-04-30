@@ -115,9 +115,9 @@ class Player:
 
         if self.moving == True:
             if self.last_direction == 'right':
-                model = self.models[1] if self.animation_tick_start + self.tick < 12 else self.models[0]
-            else:  # left
-                model = self.models[3] if self.animation_tick_start + self.tick < 12 else self.models[2]
+                model = self.models[0] if self.animation_tick_start + self.tick < 12 else self.models[1]
+            elif self.last_direction == 'left':
+                model = self.models[2] if self.animation_tick_start + self.tick < 12 else self.models[3]
             
         for y, row in enumerate(model):
             for x, pixel in enumerate(row):
