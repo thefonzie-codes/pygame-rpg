@@ -7,8 +7,7 @@ class Player:
         self.pixel_size = pixel_size
         self.tick = tick
         self.level_map = level_map
-        self.width = 8
-        self.height = 13
+        self.size = pygame.math.Vector2(8, 13)
         self.moving = False
         self.last_direction = 'right'
         self.animation_tick_start = 0
@@ -103,8 +102,10 @@ class Player:
                 self.animation_tick_start = 0
 
             # Clamp position within map bounds
-            self.position.x = max(0, min(self.position.x, self.level_map.width - self.width))
-            self.position.y = max(0, min(self.position.y, self.level_map.height - self.height))
+            self.position = pygame.math.Vector2(
+                max(0, min(self.position.x, self.level_map.size.x - self.size.x)), 
+                max(0, min(self.position.y, self.level_map.size.y - self.size.y))
+                )
 
     def draw(self, screen, position):
         model = self.models[0]

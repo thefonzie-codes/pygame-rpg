@@ -63,12 +63,12 @@ def main():
         # Debug information
         if debug_mode and tick % 10 == 0:  # Only print every 10 ticks to avoid console spam
             print("\n--- DEBUG INFO ---")
-            print(f"Camera: pos=({camera.offset_x}, {camera.offset_y}), size=({camera.width}, {camera.height})")
-            print(f"Player: pos=({player.position.x}, {player.position.y}), size=({player.width}, {player.height})")
-            print(f"Ghost: pos=({ghost.position.x}, {ghost.position.y}), size=({ghost.width}, {ghost.height})")
-            print(f"Map: viewport=({camera.offset_x}-{camera.offset_x + camera.width // PIXEL_SIZE}, "
-                  f"{camera.offset_y}-{camera.offset_y + camera.height // PIXEL_SIZE}), "
-                  f"size=({level_map.width}, {level_map.height})")
+            print(f"Camera: pos=({camera.offset.x}, {camera.offset.y}), size=({camera.size.x}, {camera.size.y})")
+            print(f"Player: pos=({player.position.x}, {player.position.y}), size=({player.size.x}, {player.size.y})")
+            print(f"Ghost: pos=({ghost.position.x}, {ghost.position.y}), size=({ghost.size.x}, {ghost.size.y})")
+            print(f"Map: viewport=({camera.offset.x}-{camera.offset.x + camera.size.x // PIXEL_SIZE}, "
+                f"{camera.offset.y}-{camera.offset.y + camera.size.y // PIXEL_SIZE}), "
+                f"size=({level_map.size.x}, {level_map.size.y})")
             print("-----------------") 
 
         if keys[pygame.K_ESCAPE]:
@@ -85,7 +85,6 @@ def main():
 
 def draw_entity(screen, entity, position, colors):
     model = entity.models[0] if entity.tick < 12 else entity.models[1]
-    draw_x, draw_y = position
 
     for y, row in enumerate(model):
         for x, pixel in enumerate(row):
@@ -103,8 +102,8 @@ def draw_entity(screen, entity, position, colors):
                 continue
 
             pygame.draw.rect(screen, color, 
-                ((draw_x + x) * entity.pixel_size, 
-                 (draw_y + y) * entity.pixel_size, 
+                ((position.x + x) * entity.pixel_size, 
+                 (position.y + y) * entity.pixel_size, 
                  entity.pixel_size, entity.pixel_size))
 
 if __name__ == '__main__':
