@@ -4,7 +4,7 @@ import pygame.math
 class Ghost:
     def __init__(self, x, y, pixel_size, tick, grid_size):
         self.position = pygame.math.Vector2(x, y)  # Replace separate x, y with Vector2
-        self.direction = pygame.math.Vector2(random.choice([(1, 0), (0, 1), (-1, 0), (0, -1)]))  # Vector2 direction
+        self.movement = pygame.math.Vector2(random.choice([(1, 0), (0, 1), (-1, 0), (0, -1)]))  # Vector2 direction
         self.size = pygame.math.Vector2(8, 11)
         self.pixel_size = pixel_size
         self.tick = tick
@@ -38,10 +38,12 @@ class Ghost:
 
     def move(self):
         if random.randint(0, 100) < 10:  # Change direction randomly
-            self.direction = pygame.math.Vector2(random.choice([(1, 0), (0, 1), (-1, 0), (0, -1)]))
+            self.movement = pygame.math.Vector2(random.choice([(1, 0), (0, 1), (-1, 0), (0, -1)]))
 
-        self.position += self.direction  # Vector addition for movement
+        self.position += self.movement  # Vector addition for movement
 
         # Clamp position within grid bounds
-        self.position.x = max(0, min(self.position.x, self.grid_size - self.size.x))
-        self.position.y = max(0, min(self.position.y, self.grid_size - self.size.y))
+        self.position = pygame.math.Vector2(
+            max(0, min(self.position.x, self.grid_size - self.size.x)), 
+            max(0, min(self.position.y, self.grid_size - self.size.y))
+            )

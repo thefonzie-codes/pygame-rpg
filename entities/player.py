@@ -109,7 +109,6 @@ class Player:
 
     def draw(self, screen, position):
         model = self.models[0]
-        draw_x, draw_y = position  # Position is already a tuple from camera.apply
         if self.moving == False:
             if self.last_direction == 'right':
                 model = self.models[0]
@@ -138,6 +137,6 @@ class Player:
                     continue
 
                 pygame.draw.rect(screen, color, 
-                    ((draw_x + x) * self.pixel_size, 
-                    (draw_y + y) * self.pixel_size, 
+                    ((position.x + x) * self.pixel_size, 
+                    (position.y + y) * self.pixel_size, 
                     self.pixel_size, self.pixel_size))

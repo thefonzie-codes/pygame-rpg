@@ -16,12 +16,11 @@ class Map:
         for x in range(int(start.x), int(end.x)):
             for y in range(int(start.y), int(end.y)):
 
+                # There is no point in converting this to a vector2.
                 pattern_x = x % len(self.floor_texture.pattern[0])
                 pattern_y = y % len(self.floor_texture.pattern)
 
                 tile = self.floor_texture.pattern[pattern_y][pattern_x]
 
-                screen_x = (x - camera.offset.x) * self.pixel_size
-                screen_y = (y - camera.offset.y) * self.pixel_size
-
-                pygame.draw.rect(screen, self.floor_texture.colors[tile], (screen_x, screen_y, self.pixel_size, self.pixel_size))
+                screen_position = pygame.math.Vector2((x - camera.offset.x) * self.pixel_size, (y - camera.offset.y) * self.pixel_size)
+                pygame.draw.rect(screen, self.floor_texture.colors[tile], (screen_position.x, screen_position.y, self.pixel_size, self.pixel_size))
