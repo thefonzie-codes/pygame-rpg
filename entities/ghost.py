@@ -1,11 +1,11 @@
 import random
+import pygame.math
 
 class Ghost:
     def __init__(self, x, y, pixel_size, tick, grid_size):
-        self.x = x
-        self.y = y
+        self.position = pygame.math.Vector2(x, y)  # Replace separate x, y with Vector2
+        self.direction = pygame.math.Vector2(random.choice([(1, 0), (0, 1), (-1, 0), (0, -1)]))  # Vector2 direction
         self.pixel_size = pixel_size
-        self.direction = random.choice([(1, 0), (0, 1), (-1, 0), (0, -1)])  # Random initial direction
         self.tick = tick
         self.grid_size = grid_size
         self.width = 8 
@@ -39,10 +39,10 @@ class Ghost:
 
     def move(self):
         if random.randint(0, 100) < 10:  # Change direction randomly
-            self.direction = random.choice([(1, 0), (0, 1), (-1, 0), (0, -1)])
-            
-        self.x += self.direction[0]
-        self.y += self.direction[1]
+            self.direction = pygame.math.Vector2(random.choice([(1, 0), (0, 1), (-1, 0), (0, -1)]))
 
-        self.x = max(0, min(self.x, self.grid_size - self.width)) 
-        self.y = max(0, min(self.y, self.grid_size - self.height))
+        self.position += self.direction  # Vector addition for movement
+
+        # Clamp position within grid bounds
+        self.position.x = max(0, min(self.position.x, self.grid_size - self.width))
+        self.position.y = max(0, min(self.position.y, self.grid_size - self.height))

@@ -3,8 +3,7 @@ from constants import COLORS
 
 class Player:
     def __init__(self, x, y, pixel_size, tick, level_map):
-        self.x = x
-        self.y = y
+        self.position = pygame.math.Vector2(x, y)  # Replace x, y with Vector2
         self.pixel_size = pixel_size
         self.tick = tick
         self.level_map = level_map
@@ -76,37 +75,40 @@ class Player:
         ]
 
     def move(self, keys):
-        if keys[pygame.K_a]:
-            self.moving = True
-            self.x -= 1
-            self.last_direction = 'left'
-            self.animation_tick_start = self.tick
-        if keys[pygame.K_d]:
-            self.moving = True
-            self.x += 1
-            self.last_direction = 'right'
-            self.animation_tick_start = self.tick
-        if keys[pygame.K_w]:
-            self.moving = True
-            self.y -= 1
-            self.animation_tick_start = self.tick
-            # self.last_direction = 'up' # Adding this into the ideal response to make it easier to implement later
-        if keys[pygame.K_s]:
-            self.moving = True
-            self.y += 1
-            self.animation_tick_start = self.tick
-            # self.last_direction = 'down' # Adding this into the ideal response to make it easier to implement later
+            movement = pygame.math.Vector2(0, 0)  # Initialize movement vector
+            if keys[pygame.K_a]:
+                self.moving = True
+                movement.x -= 1
+                self.last_direction = 'left'
+                self.animation_tick_start = self.tick
+            if keys[pygame.K_d]:
+                self.moving = True
+                movement.x += 1
+                self.last_direction = 'right'
+                self.animation_tick_start = self.tick
+            if keys[pygame.K_w]:
+                self.moving = True
+                movement.y -= 1
+                self.animation_tick_start = self.tick
+            if keys[pygame.K_s]:
+                self.moving = True
+                movement.y += 1
+                self.animation_tick_start = self.tick
 
-        if self.moving and self.tick == 24:
-            self.moving = False
-            self.animation_tick_start = 0
+            if movement.length() > 0:  # Only update position if there's movement
+                self.position += movement
 
-        self.x = max(0, min(self.x, self.level_map.width - self.width))
-        self.y = max(0, min(self.y, self.level_map.height - self.height))
+            if self.moving and self.tick == 24:
+                self.moving = False
+                self.animation_tick_start = 0
+
+            # Clamp position within map bounds
+            self.position.x = max(0, min(self.position.x, self.level_map.width - self.width))
+            self.position.y = max(0, min(self.position.y, self.level_map.height - self.height))
 
     def draw(self, screen, position):
         model = self.models[0]
-        draw_x, draw_y = position
+        draw_x, draw_y = position  # Position is already a tuple from camera.apply
         if self.moving == False:
             if self.last_direction == 'right':
                 model = self.models[0]

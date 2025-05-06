@@ -64,8 +64,8 @@ def main():
         if debug_mode and tick % 10 == 0:  # Only print every 10 ticks to avoid console spam
             print("\n--- DEBUG INFO ---")
             print(f"Camera: pos=({camera.offset_x}, {camera.offset_y}), size=({camera.width}, {camera.height})")
-            print(f"Player: pos=({player.x}, {player.y}), size=({player.width}, {player.height})")
-            print(f"Ghost: pos=({ghost.x}, {ghost.y}), size=({ghost.width}, {ghost.height})")
+            print(f"Player: pos=({player.position.x}, {player.position.y}), size=({player.width}, {player.height})")
+            print(f"Ghost: pos=({ghost.position.x}, {ghost.position.y}), size=({ghost.width}, {ghost.height})")
             print(f"Map: viewport=({camera.offset_x}-{camera.offset_x + camera.width // PIXEL_SIZE}, "
                   f"{camera.offset_y}-{camera.offset_y + camera.height // PIXEL_SIZE}), "
                   f"size=({level_map.width}, {level_map.height})")
