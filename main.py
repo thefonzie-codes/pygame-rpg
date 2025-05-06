@@ -17,7 +17,7 @@ def main():
     
     pygame.init()
 
-    screen = pygame.display.set_mode((VIEWPORT_WIDTH, VIEWPORT_HEIGHT))
+    screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
     pygame.display.set_caption('RPG Game')
 
     tick = 0
@@ -69,7 +69,11 @@ def main():
             print(f"Map: viewport=({camera.offset_x}-{camera.offset_x + camera.width // PIXEL_SIZE}, "
                   f"{camera.offset_y}-{camera.offset_y + camera.height // PIXEL_SIZE}), "
                   f"size=({level_map.width}, {level_map.height})")
-            print("-----------------")
+            print("-----------------") 
+
+        if keys[pygame.K_ESCAPE]:
+            pygame.quit()
+            sys.exit()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
