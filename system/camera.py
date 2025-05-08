@@ -19,6 +19,5 @@ class Camera:
         
     def get_frame_position(self):
         # Calculate position to center the viewport on screen
-        frame_x = (self.screen_size.x - self.size.x) // 2
-        frame_y = (self.screen_size.y - self.size.y) // 2
-        return pygame.math.Vector2(frame_x, frame_y)
+        frame = (self.screen_size - self.size) // 2
+        return pygame.math.Vector2(frame.x, frame.y)

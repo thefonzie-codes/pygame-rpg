@@ -27,7 +27,7 @@ def main():
 
     ghost = Ghost(64, 64, PIXEL_SIZE, tick, GRID_SIZE) 
 
-    camera = Camera(VIEWPORT_WIDTH, VIEWPORT_HEIGHT)
+    camera = Camera(VIEWPORT.x, VIEWPORT.y)
     camera.set_screen_size(screen_width, screen_height)
 
     base_floor = BaseFloor()
@@ -36,7 +36,7 @@ def main():
     player = Player(32, 32, PIXEL_SIZE, tick, level_map)
     
     # Create a surface for the game viewport
-    game_surface = pygame.Surface((VIEWPORT_WIDTH, VIEWPORT_HEIGHT))
+    game_surface = pygame.Surface((VIEWPORT.x, VIEWPORT.y))
 
     while running:
 
@@ -50,7 +50,22 @@ def main():
         player.tick = tick
         
         # Fill the main screen with light gray (for the frame)
-        screen.fill(COLORS['lightgrey'])
+        screen.fill(COLORS['black'])
+
+        # Get the position to center the game surface on screen
+        frame_pos = camera.get_frame_position()
+
+        # Draw the game surface onto the main screen at the centered position
+        screen.blit(game_surface, (frame_pos.x, frame_pos.y))
+
+        frame_thickness = 4
+        frame = pygame.Rect(
+            frame_pos.x - frame_thickness,
+            frame_pos.y - frame_thickness,
+            VIEWPORT.x + (frame_thickness * 2), 
+            VIEWPORT.y + (frame_thickness * 2),
+        )
+        pygame.draw.rect(screen, COLORS['lightgrey'], frame, frame_thickness)
         
         # Fill the game surface with black
         game_surface.fill(COLORS['black'])
@@ -69,12 +84,6 @@ def main():
 
         draw_entity(game_surface, ghost, ghost_pos, COLORS)
         player.draw(game_surface, player_pos)
-
-        # Get the position to center the game surface on screen
-        frame_pos = camera.get_frame_position()
-        
-        # Draw the game surface onto the main screen at the centered position
-        screen.blit(game_surface, (frame_pos.x, frame_pos.y))
 
         # Debug information
         if debug_mode and tick % 10 == 0:  # Only print every 10 ticks to avoid console spam
