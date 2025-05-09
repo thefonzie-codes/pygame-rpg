@@ -2,7 +2,7 @@ import pygame
 
 PIXEL_SIZE = 4
 GRID_SIZE = 128
-VIEWPORT = pygame.math.Vector2(PIXEL_SIZE * GRID_SIZE, PIXEL_SIZE * GRID_SIZE)
+VIEWPORT = pygame.math.Vector2(1024, 768)
 MAX_MAP_WIDTH = 256
 MAX_MAP_HEIGHT = 256
 FPS = 24

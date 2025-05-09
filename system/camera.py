@@ -10,9 +10,9 @@ class Camera:
     def set_screen_size(self, width, height):
         self.screen_size = pygame.math.Vector2(width, height)
 
-    def update(self, target):
+    def update(self, target, pixel_size = 4):
         target_center = pygame.math.Vector2(target.position.x + target.size.x // 2, target.position.y + target.size.y // 2)
-        self.offset = target_center - (self.size // (2 * target.pixel_size))
+        self.offset = target_center - (self.size // (2 * pixel_size))
 
     def apply(self, entity):
         return pygame.math.Vector2(entity.position.x - self.offset.x, entity.position.y - self.offset.y)  # Return tuple for drawing

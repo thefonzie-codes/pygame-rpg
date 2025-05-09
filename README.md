@@ -25,13 +25,13 @@ python3 main.py
 # Feature plan list:
 
 [x]Basic movement
-[]Center camera on the player
+[x]Center camera on the player
 []Collision Detection
-[]Enemy movement AI
-    - Detect player in a certain radius?
-    - Follow
-[]Basic combat
 []Visual dmg feedback
     - HP?
     - Show damage stats?
     - Attack animations
+[]Basic combat
+[]Enemy movement AI
+    - Detect player in a certain radius?
+    - Follow

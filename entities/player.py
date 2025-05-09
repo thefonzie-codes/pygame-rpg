@@ -2,11 +2,11 @@ import pygame
 from constants import COLORS
 
 class Player:
-    def __init__(self, x, y, pixel_size, tick, level_map):
+    def __init__(self, x, y, tick):
+        self.__max_health__ = 100
+        self.__current_health__ = 100
         self.position = pygame.math.Vector2(x, y)  # Replace x, y with Vector2
-        self.pixel_size = pixel_size
         self.tick = tick
-        self.level_map = level_map
         self.size = pygame.math.Vector2(8, 13)
         self.moving = False
         self.last_direction = 'right'
@@ -74,7 +74,7 @@ class Player:
 
         ]
 
-    def move(self, keys):
+    def move(self, keys, map):
             movement = pygame.math.Vector2(0, 0)  # Initialize movement vector
             if keys[pygame.K_a]:
                 self.moving = True
@@ -104,11 +104,11 @@ class Player:
 
             # Clamp position within map bounds
             self.position = pygame.math.Vector2(
-                max(0, min(self.position.x, self.level_map.size.x - self.size.x)), 
-                max(0, min(self.position.y, self.level_map.size.y - self.size.y))
+                max(0, min(self.position.x, map.size.x - self.size.x)), 
+                max(0, min(self.position.y, map.size.y - self.size.y))
                 )
 
-    def draw(self, screen, position):
+    def draw(self, screen, position, pixel_size=4):
         model = self.models[0]
         if self.moving == False:
             if self.last_direction == 'right':
@@ -138,6 +138,6 @@ class Player:
                     continue
 
                 pygame.draw.rect(screen, color, 
-                    ((position.x + x) * self.pixel_size, 
-                    (position.y + y) * self.pixel_size, 
-                    self.pixel_size, self.pixel_size))
+                    ((position.x + x) * pixel_size, 
+                    (position.y + y) * pixel_size, 
+                    pixel_size, pixel_size))
