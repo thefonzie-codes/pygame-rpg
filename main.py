@@ -9,6 +9,7 @@ from system.map import Map
 from textures.base_floor import BaseFloor
 
 def main():
+
     parser = argparse.ArgumentParser(description='RPG Game')
     parser.add_argument('--debug', action='store_true', help='Enable debug mode')
     args = parser.parse_args()
@@ -17,22 +18,31 @@ def main():
     
     pygame.init()
 
+    # Screen
     screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
     screen_width, screen_height = screen.get_size()
     pygame.display.set_caption('RPG Game')
 
+    ## Font rendering
+    pixel_font = pygame.font.Font('fonts/damage/Jersey10-Regular.ttf', 100)
+    title = pixel_font.render('PYGAME RPG', True, COLORS['white'])
+    title_rect = title.get_rect()
+
+    # FPS and Game
     tick = 0
     clock = pygame.time.Clock()
     running = True
 
-    ghost = Ghost(64, 64, tick) 
-
+    # Camera
     camera = Camera(VIEWPORT.x, VIEWPORT.y)
     camera.set_screen_size(screen_width, screen_height)
 
+    # Map
     base_floor = BaseFloor()
     level_map = Map(MAX_MAP_WIDTH, MAX_MAP_HEIGHT, PIXEL_SIZE, base_floor)
 
+    # Entities
+    ghost = Ghost(64, 64, tick) 
     player = Player(32, 32, tick)
     
     # Create a surface for the game viewport
@@ -51,6 +61,10 @@ def main():
         
         # Fill the main screen with light gray (for the frame)
         screen.fill(COLORS['black'])
+        screen.blit(title, (
+            screen_width // 2 - title_rect.w // 2,
+            (screen_height // 2 - VIEWPORT.y // 2) // 2 - title_rect.h // 2
+            ))
 
         # Get the position to center the game surface on screen
         frame_pos = camera.get_frame_position()
