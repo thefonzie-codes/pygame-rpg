@@ -21,10 +21,10 @@ class Player:
                 "GBBBBBBG",
                 "GBBBBBBG",
                 " GGGGGG ",
-                " BB  B   ",
-                "BB  DBB ",
-                "BBBDDBBB",
-                "DDDDDDDD"
+                " BG BB  ",
+                " BG BB  ",
+                "DBBBGBBD",
+                " DDDDDD "
             ],
             [
                 " GGGGGG ",
@@ -36,9 +36,24 @@ class Player:
                 "GBBBBBBG",
                 "GBBBBBBG",
                 " GGGGGG ",
-                " BG BB  ",
-                " BG BB  ",
-                "DBBBGBBD",
+                " BB  B   ",
+                "BB  DBB ",
+                "BBBDDBBB",
+                "DDDDDDDD"
+            ],
+            [
+                " GGGGGG ",
+                "GWWWWWWG",
+                "GBWWWBWG",
+                "GWWWWWWG",
+                " GGGGGG ",
+                "GBBBBBBG",
+                "GBBBBBBG",
+                "GBBBBBBG",
+                " GGGGGG ",
+                "  BB GB ",
+                "  BB GB ",
+                "DBBGBBBD",
                 " DDDDDD "
             ],
             [
@@ -56,21 +71,7 @@ class Player:
                 "BBBDDBBBB",
                 "DDDDDDDD"
             ],
-            [
-                " GGGGGG ",
-                "GWWWWWWG",
-                "GBWWWBWG",
-                "GWWWWWWG",
-                " GGGGGG ",
-                "GBBBBBBG",
-                "GBBBBBBG",
-                "GBBBBBBG",
-                " GGGGGG ",
-                "  BB GB ",
-                "  BB GB ",
-                "DBBGBBBD",
-                " DDDDDD "
-            ]
+
         ]
 
     def move(self, keys):

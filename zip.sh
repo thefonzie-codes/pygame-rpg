@@ -13,8 +13,16 @@ fi
 GIT_ROOT=$(git rev-parse --show-toplevel)
 cd "$GIT_ROOT" || exit 1
 
-# Default archive name
-ARCHIVE_NAME="${1:-$(basename "$GIT_ROOT").zip}"
+# Get the base name of the repository
+REPO_NAME=$(basename "$GIT_ROOT")
+
+# If no argument provided, prompt for suffix
+if [ -z "$1" ]; then
+  read -p "Enter archive name suffix (without .zip): " SUFFIX
+  ARCHIVE_NAME="${REPO_NAME}_${SUFFIX}.zip"
+else
+  ARCHIVE_NAME="$1"
+fi
 
 # Check if archive name ends with .zip, if not append it
 if [[ "$ARCHIVE_NAME" != *.zip ]]; then
