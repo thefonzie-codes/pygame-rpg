@@ -4,6 +4,7 @@ import argparse
 from entities.ghost import Ghost
 from entities.player import Player
 from helpers.music import play_music
+from helpers.fonts import load_font
 from system.camera import Camera
 from constants import *
 from system.map import Map
@@ -25,10 +26,11 @@ def main():
     # Screen
     screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
     screen_width, screen_height = screen.get_size()
+
     pygame.display.set_caption('RPG Game')
 
     ## Font rendering
-    pixel_font = pygame.font.Font('fonts/damage/Jersey10-Regular.ttf', 100)
+    pixel_font = load_font('fonts/damage/Jersey10-Regular.ttf', 100)
     title = pixel_font.render('PYGAME RPG', True, COLORS['white'])
     title_rect = title.get_rect()
 
@@ -46,8 +48,8 @@ def main():
     level_map = Map(MAX_MAP_WIDTH, MAX_MAP_HEIGHT, PIXEL_SIZE, base_floor)
 
     # Entities
-    ghost = Ghost(64, 64, tick) 
-    player = Player(32, 32, tick)
+    ghost = Ghost(tick) 
+    player = Player(tick)
     
     # Create a surface for the game viewport
     game_surface = pygame.Surface((VIEWPORT.x, VIEWPORT.y))

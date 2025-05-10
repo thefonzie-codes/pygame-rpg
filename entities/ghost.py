@@ -2,7 +2,7 @@ import random
 import pygame.math
 
 class Ghost:
-    def __init__(self, x, y, tick):
+    def __init__(self, tick, x = 64, y = 64 ):
         self.position = pygame.math.Vector2(x, y)  # Replace separate x, y with Vector2
         self.movement = pygame.math.Vector2(random.choice([(1, 0), (0, 1), (-1, 0), (0, -1)]))  # Vector2 direction
         self.size = pygame.math.Vector2(8, 11)

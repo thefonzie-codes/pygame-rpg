@@ -2,7 +2,7 @@ import pygame
 from constants import COLORS
 
 class Player:
-    def __init__(self, x, y, tick):
+    def __init__(self, tick, x = 32 , y = 32):
         self.__max_health__ = 100
         self.__current_health__ = 100
         self.position = pygame.math.Vector2(x, y)  # Replace x, y with Vector2
