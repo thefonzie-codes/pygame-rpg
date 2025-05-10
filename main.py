@@ -3,6 +3,7 @@ import sys
 import argparse
 from entities.ghost import Ghost
 from entities.player import Player
+from helpers.music import play_music
 from system.camera import Camera
 from constants import *
 from system.map import Map
@@ -17,6 +18,9 @@ def main():
     debug_mode = args.debug
     
     pygame.init()
+
+    # Music"
+    play_music("audio/Trilogy - Telecasted.mp3")
 
     # Screen
     screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
