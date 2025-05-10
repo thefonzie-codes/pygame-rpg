@@ -34,9 +34,9 @@ class Ghost:
             "  GG    ",
         ]]
 
-    def move(self, map):
-        if random.randint(0, 100) < 10:  # Change direction randomly
-            self.movement = pygame.math.Vector2(random.choice([(1, 0), (0, 1), (-1, 0), (0, -1)]))
+    def move(self, map, speed = 0.5):
+        if random.randint(0, 100) < 2:  # Change direction randomly
+            self.movement = pygame.math.Vector2(random.choice([(1, 0), (0, 1), (-1, 0), (0, -1)])) * speed
 
         self.position += self.movement  # Vector addition for movement
 
