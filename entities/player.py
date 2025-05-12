@@ -1,4 +1,5 @@
 import pygame
+import os
 from constants import COLORS
 
 class Player:
@@ -11,68 +12,81 @@ class Player:
         self.moving = False
         self.last_direction = 'right'
         self.animation_tick_start = 0
-        self.models = [[
-                " GGGGGG ",
-                "GWWWWWWG",
-                "GWBWWWBG",
-                "GWWWWWWG",
-                " GGGGGG ",
-                "GBBBBBBG",
-                "GBBBBBBG",
-                "GBBBBBBG",
-                " GGGGGG ",
-                " BG BB  ",
-                " BG BB  ",
-                "DBBBGBBD",
-                " DDDDDD "
-            ],
-            [
-                " GGGGGG ",
-                "GWWWWWWG",
-                "GWBWWWBG",
-                "GWWWWWWG",
-                " GGGGGG ",
-                "GBBBBBBG",
-                "GBBBBBBG",
-                "GBBBBBBG",
-                " GGGGGG ",
-                " BB  B   ",
-                "BB  DBB ",
-                "BBBDDBBB",
-                "DDDDDDDD"
-            ],
-            [
-                " GGGGGG ",
-                "GWWWWWWG",
-                "GBWWWBWG",
-                "GWWWWWWG",
-                " GGGGGG ",
-                "GBBBBBBG",
-                "GBBBBBBG",
-                "GBBBBBBG",
-                " GGGGGG ",
-                "  BB GB ",
-                "  BB GB ",
-                "DBBGBBBD",
-                " DDDDDD "
-            ],
-            [
-                " GGGGGG ",
-                "GWWWWWWG",
-                "GBWWWBWG",
-                "GWWWWWWG",
-                " GGGGGG ",
-                "GBBBBBBG",
-                "GBBBBBBG",
-                "GBBBBBBG",
-                " GGGGGG ",
-                "   B  BB ",
-                " BBD  BB",
-                "BBBDDBBBB",
-                "DDDDDDDD"
-            ],
+        self.models = self.load_sprites('assets/sprites/Player')
+        # self.models = [[
+        #         " GGGGGG ",
+        #         "GWWWWWWG",
+        #         "GWBWWWBG",
+        #         "GWWWWWWG",
+        #         " GGGGGG ",
+        #         "GBBBBBBG",
+        #         "GBBBBBBG",
+        #         "GBBBBBBG",
+        #         " GGGGGG ",
+        #         " BG BB  ",
+        #         " BG BB  ",
+        #         "DBBBGBBD",
+        #         " DDDDDD "
+        #     ],
+        #     [
+        #         " GGGGGG ",
+        #         "GWWWWWWG",
+        #         "GWBWWWBG",
+        #         "GWWWWWWG",
+        #         " GGGGGG ",
+        #         "GBBBBBBG",
+        #         "GBBBBBBG",
+        #         "GBBBBBBG",
+        #         " GGGGGG ",
+        #         " BB  B   ",
+        #         "BB  DBB ",
+        #         "BBBDDBBB",
+        #         "DDDDDDDD"
+        #     ],
+        #     [
+        #         " GGGGGG ",
+        #         "GWWWWWWG",
+        #         "GBWWWBWG",
+        #         "GWWWWWWG",
+        #         " GGGGGG ",
+        #         "GBBBBBBG",
+        #         "GBBBBBBG",
+        #         "GBBBBBBG",
+        #         " GGGGGG ",
+        #         "  BB GB ",
+        #         "  BB GB ",
+        #         "DBBGBBBD",
+        #         " DDDDDD "
+        #     ],
+        #     [
+        #         " GGGGGG ",
+        #         "GWWWWWWG",
+        #         "GBWWWBWG",
+        #         "GWWWWWWG",
+        #         " GGGGGG ",
+        #         "GBBBBBBG",
+        #         "GBBBBBBG",
+        #         "GBBBBBBG",
+        #         " GGGGGG ",
+        #         "   B  BB ",
+        #         " BBD  BB",
+        #         "BBBDDBBBB",
+        #         "DDDDDDDD"
+        #     ],
+        # ]
 
-        ]
+    def load_sprites(dir):
+        sprites = []
+        for file in os.listdir(dir):
+            if file.endswidth('.png'):
+                try:
+                    sprite_path = os.path.join(dir, file)
+                    sprites = sprites.append(pygame.image.load(sprite_path).convert_alpha())
+                    return sprites
+                except FileNotFoundError:
+                    print(f"Sprite missing for {file}")
+                except pygame.error as e:
+                    print(f"Error loading sprite for {file}: {e}")
 
     def move(self, keys, map):
             movement = pygame.math.Vector2(0, 0)  # Initialize movement vector
@@ -114,30 +128,30 @@ class Player:
             if self.last_direction == 'right':
                 model = self.models[0]
             elif self.last_direction == 'left':
-                model = self.models[2]
+                model = self.models[1]
 
         if self.moving == True:
-            if self.last_direction == 'right':
-                model = self.models[0] if self.animation_tick_start + self.tick < 12 else self.models[1]
-            elif self.last_direction == 'left':
+            model = self.models[0] if self.animation_tick_start + self.tick < 12 else self.models[1]
+            if self.last_direction == 'left':
                 model = self.models[2] if self.animation_tick_start + self.tick < 12 else self.models[3]
+                pygame.transform.flip(model)
             
-        for y, row in enumerate(model):
-            for x, pixel in enumerate(row):
-                if pixel == 'W':
-                    color = COLORS['white']
-                elif pixel == 'B':
-                    color = COLORS['black']
-                elif pixel == 'R':
-                    color = COLORS['red']
-                elif pixel == 'G':
-                    color = COLORS['grey']
-                elif pixel == 'D':
-                    color = COLORS['darkgrey']
-                else:
-                    continue
+        # for y, row in enumerate(model):
+        #     for x, pixel in enumerate(row):
+        #         if pixel == 'W':
+        #             color = COLORS['white']
+        #         elif pixel == 'B':
+        #             color = COLORS['black']
+        #         elif pixel == 'R':
+        #             color = COLORS['red']
+        #         elif pixel == 'G':
+        #             color = COLORS['grey']
+        #         elif pixel == 'D':
+        #             color = COLORS['darkgrey']
+        #         else:
+        #             continue
 
-                pygame.draw.rect(screen, color, 
-                    ((position.x + x) * pixel_size, 
-                    (position.y + y) * pixel_size, 
-                    pixel_size, pixel_size))
+            pygame.draw.rect(screen, color, 
+                ((position.x + x) * pixel_size, 
+                (position.y + y) * pixel_size, 
+                pixel_size, pixel_size))

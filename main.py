@@ -21,7 +21,7 @@ def main():
     pygame.init()
 
     # Music"
-    play_music("audio/Trilogy - Telecasted.mp3")
+    play_music("assets/audio/Trilogy - Telecasted.mp3")
 
     # Screen
     screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
