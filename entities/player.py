@@ -75,18 +75,23 @@ class Player:
         #     ],
         # ]
 
-    def load_sprites(dir):
+    def load_sprites(self, dir):
+        print("\n Loading sprites... \n")
         sprites = []
         for file in os.listdir(dir):
-            if file.endswidth('.png'):
+            print(f"{file}")
+            if file.endswith('.png'):
                 try:
                     sprite_path = os.path.join(dir, file)
-                    sprites = sprites.append(pygame.image.load(sprite_path).convert_alpha())
-                    return sprites
+                    print(f"{sprite_path}")
+                    sprite = pygame.image.load(sprite_path).convert_alpha()
+                    sprites.append(sprite)
+                    print(sprites)
                 except FileNotFoundError:
                     print(f"Sprite missing for {file}")
                 except pygame.error as e:
                     print(f"Error loading sprite for {file}: {e}")
+        return sprites
 
     def move(self, keys, map):
             movement = pygame.math.Vector2(0, 0)  # Initialize movement vector
@@ -122,19 +127,21 @@ class Player:
                 max(0, min(self.position.y, map.size.y - self.size.y))
                 )
 
-    def draw(self, screen, position, pixel_size=4):
+    def draw(self, game_surface, position, pixel_size=4):
         model = self.models[0]
         if self.moving == False:
-            if self.last_direction == 'right':
-                model = self.models[0]
-            elif self.last_direction == 'left':
-                model = self.models[1]
+            if self.last_direction == 'left':
+               model = pygame.transform.flip(model, True, False)
 
         if self.moving == True:
             model = self.models[0] if self.animation_tick_start + self.tick < 12 else self.models[1]
             if self.last_direction == 'left':
-                model = self.models[2] if self.animation_tick_start + self.tick < 12 else self.models[3]
-                pygame.transform.flip(model)
+                model = pygame.transform.flip(model, True, False)
+                # model = self.models[2] if self.animation_tick_start + self.tick < 12 else self.models[3]
+
+        game_surface.blit(model, (
+            (position.x) * pixel_size, 
+            (position.y) * pixel_size))
             
         # for y, row in enumerate(model):
         #     for x, pixel in enumerate(row):
@@ -151,7 +158,7 @@ class Player:
         #         else:
         #             continue
 
-            pygame.draw.rect(screen, color, 
-                ((position.x + x) * pixel_size, 
-                (position.y + y) * pixel_size, 
-                pixel_size, pixel_size))
+                # pygame.draw.rect(screen, color, 
+                #     ((position.x + x) * pixel_size, 
+                #     (position.y + y) * pixel_size, 
+                #     pixel_size, pixel_size))
