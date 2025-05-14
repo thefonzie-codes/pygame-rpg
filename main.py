@@ -39,6 +39,7 @@ def main():
     tick = 0
     clock = pygame.time.Clock()
     running = True
+    FPS = 24
 
     # Camera
     camera = Camera(viewport.x, viewport.y)
@@ -57,7 +58,6 @@ def main():
 
     while running:
 
-        dt = clock.tick(FPS) / 1000
         if tick >= FPS:
             tick = 0
         else:
