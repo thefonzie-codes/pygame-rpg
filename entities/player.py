@@ -1,11 +1,12 @@
 import pygame
 import os
 from constants import COLORS
+from helpers.fonts import load_font
 
 class Player:
     def __init__(self, tick, x = 32 , y = 32):
-        self.__max_health__ = 100
-        self.__current_health__ = 100
+        self.__max_hp__ = 100
+        self.__current_hp__ = 100
         self.position = pygame.math.Vector2(x, y)  # Replace x, y with Vector2
         self.tick = tick
         self.size = pygame.math.Vector2(8, 13)
@@ -13,67 +14,6 @@ class Player:
         self.last_direction = 'right'
         self.animation_tick_start = 0
         self.models = self.load_sprites('assets/sprites/Player')
-        # self.models = [[
-        #         " GGGGGG ",
-        #         "GWWWWWWG",
-        #         "GWBWWWBG",
-        #         "GWWWWWWG",
-        #         " GGGGGG ",
-        #         "GBBBBBBG",
-        #         "GBBBBBBG",
-        #         "GBBBBBBG",
-        #         " GGGGGG ",
-        #         " BG BB  ",
-        #         " BG BB  ",
-        #         "DBBBGBBD",
-        #         " DDDDDD "
-        #     ],
-        #     [
-        #         " GGGGGG ",
-        #         "GWWWWWWG",
-        #         "GWBWWWBG",
-        #         "GWWWWWWG",
-        #         " GGGGGG ",
-        #         "GBBBBBBG",
-        #         "GBBBBBBG",
-        #         "GBBBBBBG",
-        #         " GGGGGG ",
-        #         " BB  B   ",
-        #         "BB  DBB ",
-        #         "BBBDDBBB",
-        #         "DDDDDDDD"
-        #     ],
-        #     [
-        #         " GGGGGG ",
-        #         "GWWWWWWG",
-        #         "GBWWWBWG",
-        #         "GWWWWWWG",
-        #         " GGGGGG ",
-        #         "GBBBBBBG",
-        #         "GBBBBBBG",
-        #         "GBBBBBBG",
-        #         " GGGGGG ",
-        #         "  BB GB ",
-        #         "  BB GB ",
-        #         "DBBGBBBD",
-        #         " DDDDDD "
-        #     ],
-        #     [
-        #         " GGGGGG ",
-        #         "GWWWWWWG",
-        #         "GBWWWBWG",
-        #         "GWWWWWWG",
-        #         " GGGGGG ",
-        #         "GBBBBBBG",
-        #         "GBBBBBBG",
-        #         "GBBBBBBG",
-        #         " GGGGGG ",
-        #         "   B  BB ",
-        #         " BBD  BB",
-        #         "BBBDDBBBB",
-        #         "DDDDDDDD"
-        #     ],
-        # ]
 
     def load_sprites(self, dir):
         print("\n Loading sprites... \n")
@@ -84,7 +24,7 @@ class Player:
                 try:
                     sprite_path = os.path.join(dir, file)
                     print(f"{sprite_path}")
-                    sprite = pygame.image.load(sprite_path).convert_alpha()
+                    sprite = pygame.transform.scale(pygame.image.load(sprite_path).convert_alpha(), (120, 120))
                     sprites.append(sprite)
                     print(sprites)
                 except FileNotFoundError:
@@ -92,6 +32,32 @@ class Player:
                 except pygame.error as e:
                     print(f"Error loading sprite for {file}: {e}")
         return sprites
+
+    def update_health(self, hp_change):
+        ## keys will just be for testing
+        self.__current_hp__ += hp_change        ## keys will just be for testing
+
+        if hp_change < 0:
+            print(f"DAMAGE TAKEN, CURRENT HP: {self.__current_hp__}")
+            return
+
+        print(f"PLAYER HEALED:  CURRENT HP: {self.__current_hp__}")
+        print(self.__current_hp__)
+
+    def display_damage(self, damage):
+        self.update_health(damage)
+        damage_animation_tick_start = self.tick
+        animation_frame = 0
+        tick_end = damage_animation_tick_start + 24
+        pixel_font = load_font('fonts/damage/Jersey10-Regular.ttf', 100)
+        damage = pixel_font.render('PYGAME RPG', True, COLORS['red'])
+        dmg_text_rect = damage.get_rect()
+        while animation_frame < tick_end:
+            print(animation_frame)
+            print(damage)
+
+    def display_healing(self, healing):
+        pass
 
     def move(self, keys, map):
             movement = pygame.math.Vector2(0, 0)  # Initialize movement vector
@@ -142,23 +108,3 @@ class Player:
         game_surface.blit(model, (
             (position.x) * pixel_size, 
             (position.y) * pixel_size))
-            
-        # for y, row in enumerate(model):
-        #     for x, pixel in enumerate(row):
-        #         if pixel == 'W':
-        #             color = COLORS['white']
-        #         elif pixel == 'B':
-        #             color = COLORS['black']
-        #         elif pixel == 'R':
-        #             color = COLORS['red']
-        #         elif pixel == 'G':
-        #             color = COLORS['grey']
-        #         elif pixel == 'D':
-        #             color = COLORS['darkgrey']
-        #         else:
-        #             continue
-
-                # pygame.draw.rect(screen, color, 
-                #     ((position.x + x) * pixel_size, 
-                #     (position.y + y) * pixel_size, 
-                #     pixel_size, pixel_size))

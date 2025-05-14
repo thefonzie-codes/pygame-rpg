@@ -26,6 +26,7 @@ def main():
     # Screen
     screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
     screen_width, screen_height = screen.get_size()
+    viewport = pygame.math.Vector2(screen_width * 0.8, screen_height * 0.8)
 
     pygame.display.set_caption('RPG Game')
 
@@ -40,7 +41,7 @@ def main():
     running = True
 
     # Camera
-    camera = Camera(VIEWPORT.x, VIEWPORT.y)
+    camera = Camera(viewport.x, viewport.y)
     camera.set_screen_size(screen_width, screen_height)
 
     # Map
@@ -52,15 +53,17 @@ def main():
     player = Player(tick)
     
     # Create a surface for the game viewport
-    game_surface = pygame.Surface((VIEWPORT.x, VIEWPORT.y))
+    game_surface = pygame.Surface((viewport.x, viewport.y))
 
     while running:
 
-        clock.tick(FPS)
+        dt = clock.tick(FPS) / 1000
         if tick >= FPS:
             tick = 0
         else:
             tick += 1
+
+        print(tick)
             
         ghost.tick = tick
         player.tick = tick
@@ -69,7 +72,7 @@ def main():
         screen.fill(COLORS['black'])
         screen.blit(title, (
             screen_width // 2 - title_rect.w // 2,
-            (screen_height // 2 - VIEWPORT.y // 2) // 2 - title_rect.h // 2
+            (screen_height // 2 - viewport.y // 2) // 2 - title_rect.h // 2
             ))
 
         # Get the position to center the game surface on screen
@@ -82,8 +85,8 @@ def main():
         frame = pygame.Rect(
             frame_pos.x - frame_thickness,
             frame_pos.y - frame_thickness,
-            VIEWPORT.x + (frame_thickness * 2), 
-            VIEWPORT.y + (frame_thickness * 2),
+            viewport.x + (frame_thickness * 2), 
+            viewport.y + (frame_thickness * 2),
         )
         pygame.draw.rect(screen, COLORS['lightgrey'], frame, frame_thickness)
         
@@ -92,6 +95,13 @@ def main():
 
         keys = pygame.key.get_pressed()
         player.move(keys, level_map)
+
+        ## temp for testing player dmg
+        if keys[pygame.K_x]:
+            player.update_health(5)
+        if keys[pygame.K_z]:
+            player.update_health(-5)
+        #####
                 
         ghost.move(level_map)
         camera.update(player)
