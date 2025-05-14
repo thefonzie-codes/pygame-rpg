@@ -63,8 +63,6 @@ def main():
         else:
             tick += 1
 
-        print(tick)
-            
         ghost.tick = tick
         player.tick = tick
         
@@ -94,16 +92,9 @@ def main():
         game_surface.fill(COLORS['black'])
 
         keys = pygame.key.get_pressed()
-        player.move(keys, level_map)
-
-        ## temp for testing player dmg
-        if keys[pygame.K_x]:
-            player.update_health(5)
-        if keys[pygame.K_z]:
-            player.update_health(-5)
-        #####
                 
-        ghost.move(level_map)
+        player.update(keys, level_map)
+        ghost.update(level_map)
         camera.update(player)
 
         # Draw to the game surface instead of directly to the screen
@@ -112,7 +103,7 @@ def main():
         ghost_pos = camera.apply(ghost)
         player_pos = camera.apply(player)
 
-        draw_entity(game_surface, ghost, ghost_pos, COLORS)
+        ghost.draw(game_surface, ghost_pos)
         player.draw(game_surface, player_pos)
 
         # Debug information
@@ -138,29 +129,6 @@ def main():
                 sys.exit()
 
         pygame.display.flip()  # Update the display
-
-def draw_entity(screen, entity, position, colors, pixel_size = 4):
-    model = entity.models[0] if entity.tick < 12 else entity.models[1]
-
-    for y, row in enumerate(model):
-        for x, pixel in enumerate(row):
-            if pixel == 'W':
-                color = colors['white']
-            elif pixel == 'B':
-                color = colors['black']
-            elif pixel == 'R':
-                color = colors['red']
-            elif pixel == 'G':
-                color = colors['grey']
-            elif pixel == 'D':
-                color = colors['darkgrey']
-            else:
-                continue
-
-            pygame.draw.rect(screen, color, 
-                ((position.x + x) * pixel_size, 
-                 (position.y + y) * pixel_size, 
-                 pixel_size, pixel_size))
 
 if __name__ == '__main__':
     main()

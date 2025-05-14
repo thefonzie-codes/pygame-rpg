@@ -1,5 +1,6 @@
 import random
 import pygame.math
+from constants import COLORS
 
 class Ghost:
     def __init__(self, tick, x = 64, y = 64 ):
@@ -34,7 +35,7 @@ class Ghost:
             "  GG    ",
         ]]
 
-    def move(self, map, speed = 0.5):
+    def update(self, map, speed = 0.5):
         if random.randint(0, 100) < 2:  # Change direction randomly
             self.movement = pygame.math.Vector2(random.choice([(1, 0), (0, 1), (-1, 0), (0, -1)])) * speed
 
@@ -45,3 +46,27 @@ class Ghost:
             max(0, min(self.position.x, map.size.x - self.size.x)), 
             max(0, min(self.position.y, map.size.y - self.size.y))
             )
+
+
+    def draw(self, screen, position, pixel_size = 4):
+        model = self.models[0] if self.tick < 12 else self.models[1]
+
+        for y, row in enumerate(model):
+            for x, pixel in enumerate(row):
+                if pixel == 'W':
+                    color = COLORS['white']
+                elif pixel == 'B':
+                    color = COLORS['black']
+                elif pixel == 'R':
+                    color = COLORS['red']
+                elif pixel == 'G':
+                    color = COLORS['grey']
+                elif pixel == 'D':
+                    color = COLORS['darkgrey']
+                else:
+                    continue
+
+                pygame.draw.rect(screen, color, 
+                    ((position.x + x) * pixel_size, 
+                    (position.y + y) * pixel_size, 
+                    pixel_size, pixel_size))

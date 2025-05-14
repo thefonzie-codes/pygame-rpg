@@ -20,8 +20,12 @@ COPY requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-ENV SDL_VIDEODRIVER=x11
-ENV DISPLAY=:99
+COPY . .
 
-CMD CMD xvfb-run -s "-screen 0 1280x720x24" python main.py
+RUN echo '#!/bin/bash\n\
+Xvfb :99 -screen 0 1280x720x24 -ac &\n\
+export DISPLAY=:99\n\
+python main.py\n' > /start.sh && chmod +x /start.sh
 
+# Command to run the game
+CMD ["/start.sh"]

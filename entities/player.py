@@ -5,8 +5,6 @@ from helpers.fonts import load_font
 
 class Player:
     def __init__(self, tick, x = 32 , y = 32):
-        self.__max_hp__ = 100
-        self.__current_hp__ = 100
         self.position = pygame.math.Vector2(x, y)  # Replace x, y with Vector2
         self.tick = tick
         self.size = pygame.math.Vector2(8, 13)
@@ -33,33 +31,7 @@ class Player:
                     print(f"Error loading sprite for {file}: {e}")
         return sprites
 
-    def update_health(self, hp_change):
-        ## keys will just be for testing
-        self.__current_hp__ += hp_change        ## keys will just be for testing
-
-        if hp_change < 0:
-            print(f"DAMAGE TAKEN, CURRENT HP: {self.__current_hp__}")
-            return
-
-        print(f"PLAYER HEALED:  CURRENT HP: {self.__current_hp__}")
-        print(self.__current_hp__)
-
-    def display_damage(self, damage):
-        self.update_health(damage)
-        damage_animation_tick_start = self.tick
-        animation_frame = 0
-        tick_end = damage_animation_tick_start + 24
-        pixel_font = load_font('fonts/damage/Jersey10-Regular.ttf', 100)
-        damage = pixel_font.render('PYGAME RPG', True, COLORS['red'])
-        dmg_text_rect = damage.get_rect()
-        while animation_frame < tick_end:
-            print(animation_frame)
-            print(damage)
-
-    def display_healing(self, healing):
-        pass
-
-    def move(self, keys, map):
+    def update(self, keys, map):
             movement = pygame.math.Vector2(0, 0)  # Initialize movement vector
             if keys[pygame.K_a]:
                 self.moving = True
