@@ -4,13 +4,15 @@ from constants import COLORS
 from helpers.fonts import load_font
 
 class Player:
-    def __init__(self, tick, x = 32 , y = 32):
+    def __init__(self, x=32, y=32):
+        self.__max_health__ = 100
+        self.__current_health__ = 100
         self.position = pygame.math.Vector2(x, y)  # Replace x, y with Vector2
-        self.tick = tick
         self.size = pygame.math.Vector2(8, 13)
         self.moving = False
         self.last_direction = 'right'
-        self.animation_tick_start = 0
+        self.animation_time_start = 0
+        self.animation_duration = 0.5  # Duration of animation cycle in seconds
         self.models = self.load_sprites('assets/sprites/Player')
 
     def load_sprites(self, dir):
@@ -31,52 +33,64 @@ class Player:
                     print(f"Error loading sprite for {file}: {e}")
         return sprites
 
-    def update(self, keys, map):
-            movement = pygame.math.Vector2(0, 0)  # Initialize movement vector
-            if keys[pygame.K_a]:
-                self.moving = True
-                movement.x -= 1
-                self.last_direction = 'left'
-                self.animation_tick_start = self.tick
-            if keys[pygame.K_d]:
-                self.moving = True
-                movement.x += 1
-                self.last_direction = 'right'
-                self.animation_tick_start = self.tick
-            if keys[pygame.K_w]:
-                self.moving = True
-                movement.y -= 1
-                self.animation_tick_start = self.tick
-            if keys[pygame.K_s]:
-                self.moving = True
-                movement.y += 1
-                self.animation_tick_start = self.tick
+    def move(self, keys, map, dt):
+        movement = pygame.math.Vector2(0, 0)  # Initialize movement vector
+        speed = 50  # Pixels per second
+        if keys[pygame.K_a]:
+            self.moving = True
+            movement.x -= speed * dt
+            self.last_direction = 'left'
+            if self.animation_time_start == 0:
+                self.animation_time_start = pygame.time.get_ticks() / 1000.0
+        if keys[pygame.K_d]:
+            self.moving = True
+            movement.x += speed * dt
+            self.last_direction = 'right'
+            if self.animation_time_start == 0:
+                self.animation_time_start = pygame.time.get_ticks() / 1000.0
+        if keys[pygame.K_w]:
+            self.moving = True
+            movement.y -= speed * dt
+            if self.animation_time_start == 0:
+                self.animation_time_start = pygame.time.get_ticks() / 1000.0
+        if keys[pygame.K_s]:
+            self.moving = True
+            movement.y += speed * dt
+            if self.animation_time_start == 0:
+                self.animation_time_start = pygame.time.get_ticks() / 1000.0
 
-            if movement.length() > 0:  # Only update position if there's movement
-                self.position += movement
+        if movement.length() > 0:  # Only update position if there's movement
+            self.position += movement
+        else:
+            self.moving = False
+            self.animation_time_start = 0
 
-            if self.moving and self.tick == 24:
-                self.moving = False
-                self.animation_tick_start = 0
+        # Clamp position within map bounds
+        self.position = pygame.math.Vector2(
+            max(0, min(self.position.x, map.size.x - self.size.x)), 
+            max(0, min(self.position.y, map.size.y - self.size.y))
+            )
 
-            # Clamp position within map bounds
-            self.position = pygame.math.Vector2(
-                max(0, min(self.position.x, map.size.x - self.size.x)), 
-                max(0, min(self.position.y, map.size.y - self.size.y))
-                )
+    def update(self, keys, map, dt):
+        self.move(keys, map, dt)
 
-    def draw(self, game_surface, position, pixel_size=4):
+    def draw(self, screen, position, pixel_size=4):
         model = self.models[0]
         if self.moving == False:
-            if self.last_direction == 'left':
-               model = pygame.transform.flip(model, True, False)
-
-        if self.moving == True:
-            model = self.models[0] if self.animation_tick_start + self.tick < 12 else self.models[1]
-            if self.last_direction == 'left':
-                model = pygame.transform.flip(model, True, False)
-                # model = self.models[2] if self.animation_tick_start + self.tick < 12 else self.models[3]
-
+            if self.last_direction == 'right':
+                model = self.models[0]
+            elif self.last_direction == 'left':
+                model = self.models[2]
+        else:
+            current_time = pygame.time.get_ticks() / 1000.0
+            elapsed = current_time - self.animation_time_start
+            if elapsed < self.animation_duration / 2:
+                model = self.models[0 if self.last_direction == 'right' else 2]
+            else:
+                model = self.models[1 if self.last_direction == 'right' else 3]
+            if elapsed >= self.animation_duration:
+                self.animation_time_start = current_time  # Reset animation cycle
+        
         game_surface.blit(model, (
             (position.x) * pixel_size, 
             (position.y) * pixel_size))

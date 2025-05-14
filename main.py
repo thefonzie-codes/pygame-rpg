@@ -36,10 +36,9 @@ def main():
     title_rect = title.get_rect()
 
     # FPS and Game
-    tick = 0
     clock = pygame.time.Clock()
     running = True
-    FPS = 24
+    last_time = pygame.time.get_ticks() / 1000.0  # Convert to seconds
 
     # Camera
     camera = Camera(viewport.x, viewport.y)
@@ -57,15 +56,10 @@ def main():
     game_surface = pygame.Surface((viewport.x, viewport.y))
 
     while running:
+        current_time = pygame.time.get_ticks() / 1000.0  # Convert to seconds
+        dt = current_time - last_time  # Delta time in seconds
+        last_time = current_time
 
-        if tick >= FPS:
-            tick = 0
-        else:
-            tick += 1
-
-        ghost.tick = tick
-        player.tick = tick
-        
         # Fill the main screen with light gray (for the frame)
         screen.fill(COLORS['black'])
         screen.blit(title, (
@@ -93,8 +87,8 @@ def main():
 
         keys = pygame.key.get_pressed()
                 
-        player.update(keys, level_map)
-        ghost.update(level_map)
+        player.update(keys, level_map, dt)
+        ghost.update(level_map, dt)
         camera.update(player)
 
         # Draw to the game surface instead of directly to the screen
@@ -107,8 +101,9 @@ def main():
         player.draw(game_surface, player_pos)
 
         # Debug information
-        if debug_mode and tick % 10 == 0:  # Only print every 10 ticks to avoid console spam
+        if debug_mode:  # Print debug info every frame with dt
             print("\n--- DEBUG INFO ---")
+            print(f"Delta Time: {dt:.4f} seconds")
             print(f"Camera: pos=({camera.offset.x}, {camera.offset.y}), size=({camera.size.x}, {camera.size.y})")
             print(f"Frame position: ({frame_pos.x}, {frame_pos.y})")
             print(f"Screen size: ({screen_width}, {screen_height})")
@@ -129,6 +124,7 @@ def main():
                 sys.exit()
 
         pygame.display.flip()  # Update the display
+        clock.tick()  # No FPS cap, just let it run
 
 if __name__ == '__main__':
     main()
