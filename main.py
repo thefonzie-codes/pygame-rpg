@@ -49,8 +49,8 @@ def main():
     level_map = Map(MAX_MAP_WIDTH, MAX_MAP_HEIGHT, PIXEL_SIZE, base_floor)
 
     # Entities
-    ghost = Ghost(tick) 
-    player = Player(tick)
+    ghost = Ghost() 
+    player = Player()
     
     # Create a surface for the game viewport
     game_surface = pygame.Surface((viewport.x, viewport.y))

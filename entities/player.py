@@ -17,20 +17,24 @@ class Player:
 
     def load_sprites(self, dir):
         print("\n Loading sprites... \n")
-        sprites = []
-        for file in os.listdir(dir):
-            print(f"{file}")
+        sprites = {
+            "left": [],
+            "right": []
+            }
+        files = sorted(os.listdir(dir))
+        for file in files:
             if file.endswith('.png'):
                 try:
                     sprite_path = os.path.join(dir, file)
                     print(f"{sprite_path}")
                     sprite = pygame.transform.scale(pygame.image.load(sprite_path).convert_alpha(), (120, 120))
-                    sprites.append(sprite)
-                    print(sprites)
+                    sprites['right'].append(sprite)
+                    sprites['left'].append(pygame.transform.flip(sprite, True, False))
                 except FileNotFoundError:
                     print(f"Sprite missing for {file}")
                 except pygame.error as e:
                     print(f"Error loading sprite for {file}: {e}")
+
         return sprites
 
     def move(self, keys, map, dt):
@@ -75,22 +79,20 @@ class Player:
         self.move(keys, map, dt)
 
     def draw(self, screen, position, pixel_size=4):
-        model = self.models[0]
+        model = self.models['right'][0]
         if self.moving == False:
-            if self.last_direction == 'right':
-                model = self.models[0]
-            elif self.last_direction == 'left':
-                model = self.models[2]
+                model = self.models[self.last_direction][0]
+
         else:
             current_time = pygame.time.get_ticks() / 1000.0
             elapsed = current_time - self.animation_time_start
             if elapsed < self.animation_duration / 2:
-                model = self.models[0 if self.last_direction == 'right' else 2]
+                model = self.models[self.last_direction][1]
             else:
-                model = self.models[1 if self.last_direction == 'right' else 3]
+                model = self.models[self.last_direction][0]
             if elapsed >= self.animation_duration:
                 self.animation_time_start = current_time  # Reset animation cycle
         
-        game_surface.blit(model, (
+        screen.blit(model, (
             (position.x) * pixel_size, 
             (position.y) * pixel_size))
