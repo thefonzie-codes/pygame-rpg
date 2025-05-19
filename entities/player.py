@@ -27,7 +27,7 @@ class Player:
                 try:
                     sprite_path = os.path.join(dir, file)
                     print(f"{sprite_path}")
-                    sprite = pygame.transform.scale(pygame.image.load(sprite_path).convert_alpha(), (120, 120))
+                    sprite = pygame.image.load(sprite_path).convert_alpha()
                     sprites['right'].append(sprite)
                     sprites['left'].append(pygame.transform.flip(sprite, True, False))
                 except FileNotFoundError:
