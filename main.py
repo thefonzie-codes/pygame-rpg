@@ -24,7 +24,7 @@ def main():
     play_music("assets/audio/Trilogy - Telecasted.mp3")
 
     # Screen
-    screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+    screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN | pygame.HWSURFACE | pygame.DOUBLEBUF)
     screen_width, screen_height = screen.get_size()
     viewport = pygame.math.Vector2(screen_width * 0.8, screen_height * 0.8)
 
@@ -45,8 +45,7 @@ def main():
     camera.set_screen_size(screen_width, screen_height)
 
     # Map
-    base_floor = BaseFloor()
-    level_map = Map(MAX_MAP_WIDTH, MAX_MAP_HEIGHT, PIXEL_SIZE, base_floor)
+    level_map = Map(PIXEL_SIZE)
 
     # Entities
     ghost = Ghost() 

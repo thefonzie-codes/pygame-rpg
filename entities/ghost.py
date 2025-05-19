@@ -9,7 +9,7 @@ class Ghost:
         self.movement = pygame.math.Vector2(random.choice([(1, 0), (0, 1), (-1, 0), (0, -1)]))  # Vector2 direction
         self.size = pygame.math.Vector2(8, 11)
         self.animation_time_start = pygame.time.get_ticks() / 1000.0
-        self.animation_duration = 0.5  # Duration of animation cycle in seconds
+        self.animation_duration = 1  # Duration of animation cycle in seconds
         self.models = self.load_sprites('assets/sprites/Ghost')
         self.last_direction = "right"
         # self.models = [[
@@ -86,9 +86,11 @@ class Ghost:
         # else:
         current_time = pygame.time.get_ticks() / 1000.0
         elapsed = current_time - self.animation_time_start
-        if elapsed < self.animation_duration / 3:
+        # print(f"Elapsed: {elapsed}")
+
+        if elapsed <= self.animation_duration / 3:
             model = self.models[self.last_direction][0]
-        if elapsed > self.animation_duration / 3 and elapsed < self.animation_duration / 3 * 2:
+        if elapsed > self.animation_duration / 3 and elapsed <= self.animation_duration / 3 * 2:
             model = self.models[self.last_direction][1]
         else:
             model = self.models[self.last_direction][2]
