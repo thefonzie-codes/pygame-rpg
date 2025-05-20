@@ -50,9 +50,27 @@ def main():
     # Entities
     ghost = Ghost() 
     player = Player()
+
     
     # Create a surface for the game viewport
     game_surface = pygame.Surface((viewport.x, viewport.y))
+
+    # Drawing the black background and blitting the frame
+    frame_pos = camera.get_frame_position()
+    frame_thickness = 4
+    frame = pygame.Rect(
+            frame_pos.x - frame_thickness,
+            frame_pos.y - frame_thickness,
+            viewport.x + (frame_thickness * 2), 
+            viewport.y + (frame_thickness * 2),
+        )
+    
+    screen.fill(COLORS['black'])
+    screen.blit(title, (
+        screen_width // 2 - title_rect.w // 2,
+        (screen_height // 2 - viewport.y // 2) // 2 - title_rect.h // 2
+        ))
+    pygame.draw.rect(screen, COLORS['lightgrey'], frame, frame_thickness)
 
     while running:
         current_time = pygame.time.get_ticks() / 1000.0  # Convert to seconds
@@ -60,26 +78,9 @@ def main():
         last_time = current_time
 
         # Fill the main screen with light gray (for the frame)
-        screen.fill(COLORS['black'])
-        screen.blit(title, (
-            screen_width // 2 - title_rect.w // 2,
-            (screen_height // 2 - viewport.y // 2) // 2 - title_rect.h // 2
-            ))
-
-        # Get the position to center the game surface on screen
-        frame_pos = camera.get_frame_position()
 
         # Draw the game surface onto the main screen at the centered position
         screen.blit(game_surface, (frame_pos.x, frame_pos.y))
-
-        frame_thickness = 4
-        frame = pygame.Rect(
-            frame_pos.x - frame_thickness,
-            frame_pos.y - frame_thickness,
-            viewport.x + (frame_thickness * 2), 
-            viewport.y + (frame_thickness * 2),
-        )
-        pygame.draw.rect(screen, COLORS['lightgrey'], frame, frame_thickness)
         
         # Fill the game surface with black
         game_surface.fill(COLORS['black'])
@@ -123,7 +124,7 @@ def main():
                 sys.exit()
 
         pygame.display.flip()  # Update the display
-        clock.tick()  # No FPS cap, just let it run
+        clock.tick(60)  # No FPS cap, just let it run
 
 if __name__ == '__main__':
     main()
